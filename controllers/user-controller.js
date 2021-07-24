@@ -75,8 +75,8 @@ const userController = {
                     return;
                 }
                 return Thought.deleteMany({ username: dbUserData.username })
-                // res.json(dbUserData);
             })
+            .then( () => res.json({message: 'user deleted successfully'}))
             .catch(err => {
                 console.error(err);
                 res.status(400).json(err);

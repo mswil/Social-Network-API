@@ -30,6 +30,7 @@ const thoughtController = {
     /* Expects
     {
         "thoughtText": "text"
+        "username": name
         "userId": "id#"
     } 
     */
@@ -82,8 +83,13 @@ const thoughtController = {
                     res.status(404).json({ message: 'No thought found with this id!' });
                     return;
                 }
-                res.json(dbThoughtData);
+                return User.findOneAndUpdate(
+                    { username: dbThoughtData.username },
+                    { $pull: { thoughts: { _id: dbThoughtData._id } } },
+                    { new: true }
+                );
             })
+            .then(() => res.json({ message: 'thought deleted successfully' }))
             .catch(err => {
                 console.error(err);
                 res.status(400).json(err);
@@ -104,7 +110,7 @@ const thoughtController = {
             { $push: { reactions: body } },
             { new: true, runValidators: true }
         )
-        .select('-__v -_id -id')
+            .select('-__v -_id -id')
 
             .then(dbThoughtData => {
                 if (!dbThoughtData) {
