@@ -30,15 +30,14 @@ const thoughtController = {
     /* Expects
     {
         "thoughtText": "text"
-        "username": "lernantino",
         "userId": "id#"
     } 
     */
-    createThought({ params, body }, res) {
+    createThought({ body }, res) {
         Thought.create(body)
             .then(({ _id }) => {
                 return User.findOneAndUpdate(
-                    { _id: params.UserId },
+                    { _id: body.userId },
                     { $push: { thoughts: _id } },
                     { new: true }
                 );
