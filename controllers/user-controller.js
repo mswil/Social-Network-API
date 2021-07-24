@@ -100,7 +100,11 @@ const userController = {
     },
 
     removeFriend({ params }, res) {
-        User.findOneAndUpdate({ _id: params.userId }, { $pull: { friends: params.friendId } }, { new: true })
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $pull: { friends: params.friendId } },
+            { new: true }
+        )
             .then(dbFriendData => {
                 if (!dbFriendData) {
                     res.status(404).json({ message: 'user and/or friend do not exist' });
